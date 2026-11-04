@@ -740,3 +740,32 @@ h1, h2, h3, p { margin: 0; }
 [data-theme='light'] .contact-lines b { color: #1d2b27; }
 [data-theme='light'] .contact-copy p { color: var(--body); }
 [data-theme='light'] .theme-toggle:hover { background: rgba(31, 122, 88, 0.1); border-color: rgba(31, 122, 88, 0.4); }
+
+/* v1.3: блок «Обо мне» в стиле референса: факты, абзацы и кнопки */
+.about-facts { margin: 40px 0 0; display: grid; gap: 18px; max-width: 420px; }
+.about-facts div { display: grid; grid-template-columns: 130px 1fr; gap: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+.about-facts dt { font-size: 14px; color: var(--muted); }
+.about-facts dd { margin: 0; font-size: 16px; color: var(--text); font-weight: 500; }
+.about-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 22px; border-radius: 30px;
+  font-size: 15px; font-weight: 600;
+  border: 1px solid transparent;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.btn-primary { background: var(--mint); color: #08100e; }
+.btn-primary:hover { background: #ffffff; }
+.btn-ghost { border-color: rgba(185, 244, 216, 0.5); color: var(--mint); }
+.btn-ghost:hover { background: var(--mint); color: #08100e; }
+[data-theme='light'] .btn-primary { color: #ffffff; }
+[data-theme='light'] .btn-primary:hover { background: #26372f; }
+[data-theme='light'] .btn-ghost:hover { color: #ffffff; }
+.about-copy .lead { font-size: 24px; line-height: 1.4; font-weight: 600; color: var(--text); margin-bottom: 26px; }
+.about-copy p { font-size: 17px; line-height: 1.75; }
+@media (max-width: 640px) {
+  .about-facts div { grid-template-columns: 110px 1fr; }
+  .about-copy .lead { font-size: 20px; }
+  .about-copy p { font-size: 16px; }
+  .btn { padding: 12px 18px; font-size: 14px; }
+}
