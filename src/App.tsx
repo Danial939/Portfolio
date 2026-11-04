@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import {
   MotionConfig,
   motion,
@@ -47,6 +47,61 @@ const contactLines = [
   { label: 'Email', value: 'почта@домен.ру' },
   { label: 'Телефон', value: '+7 (___) ___-__-__' },
 ];
+
+/* ----------------------------------------------------- иконки технологий
+   Логотипы из открытого набора Simple Icons (CDN jsDelivr).
+   Цвет берётся из фирменного. Если иконки нет, показываем только название. */
+const TECH_ICONS: Record<string, [string, string]> = {
+  'HTML5': ['html5', '#E34F26'],
+  'CSS3': ['css3', '#1572B6'],
+  'JavaScript': ['javascript', '#F7DF1E'],
+  'TypeScript': ['typescript', '#3178C6'],
+  'React': ['react', '#61DAFB'],
+  'Next.js': ['nextdotjs', 'currentColor'],
+  'Redux Toolkit': ['redux', '#764ABC'],
+  'TanStack Query': ['reactquery', '#FF4154'],
+  'SCSS': ['sass', '#CC6699'],
+  'Tailwind CSS': ['tailwindcss', '#06B6D4'],
+  'Bootstrap': ['bootstrap', '#7952B3'],
+  'Three.js': ['threedotjs', 'currentColor'],
+  'Node.js': ['nodedotjs', '#5FA04E'],
+  'Express.js': ['express', 'currentColor'],
+  'NestJS': ['nestjs', '#E0234E'],
+  'PostgreSQL': ['postgresql', '#4169E1'],
+  'MySQL': ['mysql', '#4479A1'],
+  'MongoDB': ['mongodb', '#47A248'],
+  'Redis': ['redis', '#FF4438'],
+  'Git': ['git', '#F05032'],
+  'Docker': ['docker', '#2496ED'],
+  'Vite': ['vite', '#646CFF'],
+  'Webpack': ['webpack', '#8DD6F9'],
+  'Jest': ['jest', '#C21325'],
+  'Vitest': ['vitest', '#6E9F18'],
+  'Testing Library': ['testinglibrary', '#E33332'],
+  'Linux': ['linux', '#FCC624'],
+  'Nginx': ['nginx', '#009639'],
+  'JWT / Refresh': ['jsonwebtokens', '#D63AFF'],
+};
+
+function TechIcon({ name }: { name: string }) {
+  const entry = TECH_ICONS[name];
+  if (!entry) return null;
+  const [slug, color] = entry;
+  const url = `url(https://cdn.jsdelivr.net/npm/simple-icons@13/icons/${slug}.svg)`;
+  return <i className="tech-icon" aria-hidden="true" style={{ '--m': url, '--ic': color } as unknown as CSSProperties} />;
+}
+
+/* Блок, который двигается по прокрутке с собственной скоростью (параллакс) */
+function ParallaxBlock({ children, speed = 60 }: { children: ReactNode; speed?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const y = useTransform(scrollYProgress, [0, 1], [speed, -speed]);
+  return (
+    <motion.div ref={ref} style={{ y }}>
+      {children}
+    </motion.div>
+  );
+}
 
 /* ------------------------------------------------------------ примитивы */
 
@@ -267,53 +322,70 @@ function About() {
       </div>
       <div className="about-layout">
         <div className="about-title">
-          <Reveal>
-            <h2>
-              Обо мне<span>.</span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <dl className="about-facts">
-              <div>
-                <dt>Город</dt>
-                <dd>Краснодар</dd>
-              </div>
-              <div>
-                <dt>Образование</dt>
-                <dd>Бизнес-информатика</dd>
-              </div>
-              <div>
-                <dt>Направления</dt>
-                <dd>Автоматизация, сайты, AI, веб-приложения</dd>
-              </div>
-            </dl>
-          </Reveal>
+          <ParallaxBlock speed={90}>
+            <Reveal>
+              <h2>
+                Обо мне<span>.</span>
+              </h2>
+            </Reveal>
+          </ParallaxBlock>
+          <ParallaxBlock speed={30}>
+            <Reveal delay={0.1}>
+              <dl className="about-facts">
+                <div>
+                  <dt>Город</dt>
+                  <dd>Краснодар</dd>
+                </div>
+                <div>
+                  <dt>Образование</dt>
+                  <dd>Бизнес-информатика</dd>
+                </div>
+                <div>
+                  <dt>Направления</dt>
+                  <dd>Автоматизация, сайты, AI, веб-приложения</dd>
+                </div>
+              </dl>
+            </Reveal>
+          </ParallaxBlock>
         </div>
         <div className="about-copy">
-          <Reveal>
-            <p className="lead">Привет, я Даниил — разработчик и специалист по автоматизации бизнеса.</p>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <p>
-              Учусь на бизнес-информатике, поэтому смотрю на разработку не только со стороны кода, но и через бизнес-процессы: где теряется время, что можно упростить и как технология приносит реальную пользу.
-            </p>
-          </Reveal>
-          <Reveal delay={0.14}>
-            <p>
-              Делаю сайты, веб-приложения и AI-автоматизацию. Не усложняю систему модными инструментами: подбираю решение, которое действительно работает.
-            </p>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <div className="about-actions">
-              <a href="#projects" className="btn btn-primary">
-                Смотреть проекты <ArrowUpRight size={17} />
-              </a>
-              <a href="#contact" className="btn btn-ghost">
-                Связаться
-              </a>
-            </div>
-          </Reveal>
+          <ParallaxBlock speed={-50}>
+            <Reveal>
+              <p className="lead">Привет, я Даниил — разработчик и специалист по автоматизации бизнеса.</p>
+            </Reveal>
+          </ParallaxBlock>
+          <ParallaxBlock speed={40}>
+            <Reveal delay={0.08}>
+              <p>
+                Учусь на бизнес-информатике, поэтому смотрю на разработку не только со стороны кода, но и через бизнес-процессы: где теряется время, что можно упростить и как технология приносит реальную пользу.
+              </p>
+            </Reveal>
+          </ParallaxBlock>
+          <ParallaxBlock speed={20}>
+            <Reveal delay={0.14}>
+              <p>
+                Делаю сайты, веб-приложения и AI-автоматизацию. Не усложняю систему модными инструментами: подбираю решение, которое действительно работает.
+              </p>
+            </Reveal>
+          </ParallaxBlock>
+          <ParallaxBlock speed={-20}>
+            <Reveal delay={0.2}>
+              <div className="about-actions">
+                <a href="#projects" className="btn btn-primary">
+                  Смотреть проекты <ArrowUpRight size={17} />
+                </a>
+                <a href="#contact" className="btn btn-ghost">
+                  Связаться
+                </a>
+              </div>
+            </Reveal>
+          </ParallaxBlock>
         </div>
+      </div>
+      <div className="about-foot">
+        <span>01 — Think</span>
+        <span>02 — Build</span>
+        <span>03 — Improve</span>
       </div>
     </section>
   );
@@ -498,7 +570,7 @@ function TechSphere({ active }: { active: number }) {
             }}
             className={`sphere-chip ${p.gi === active ? 'is-hot' : ''}`}
           >
-            {p.name}
+            <TechIcon name={p.name} />{p.name}
           </span>
         ))}
       </div>
@@ -571,7 +643,7 @@ function Stack() {
                 </div>
                 <div className="tech-pills">
                   {g.items.map((t) => (
-                    <span key={t}>{t}</span>
+                    <span key={t}><TechIcon name={t} />{t}</span>
                   ))}
                 </div>
               </div>
@@ -795,7 +867,7 @@ function TechBanner() {
     <div className="marquee tech-banner" aria-hidden="true">
       <div className="marquee-track">
         {[...items, ...items, ...items].map((w, i) => (
-          <span key={i}>{w}</span>
+          <span key={i}><TechIcon name={w} />{w}</span>
         ))}
       </div>
     </div>
