@@ -7,7 +7,7 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion';
-import { ArrowDownRight, ArrowRight, ArrowUpRight, Menu, X } from 'lucide-react';
+import { ArrowDownRight, ArrowRight, ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react';
 
 /* ------------------------------------------------------------------ данные */
 
@@ -129,6 +129,33 @@ function Flashlight() {
 
 /* ------------------------------------------------------------- секции */
 
+function ThemeToggle() {
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    try {
+      return localStorage.getItem('theme') === 'light' ? 'light' : 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    try {
+      localStorage.setItem('theme', theme);
+    } catch {
+      /* приватный режим: тема просто не сохранится */
+    }
+  }, [theme]);
+  return (
+    <button
+      className="theme-toggle"
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}
+    >
+      {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+    </button>
+  );
+}
+
 function Navbar() {
   const [open, setOpen] = useState(false);
   const links: [string, string][] = [
@@ -141,13 +168,7 @@ function Navbar() {
   ];
   return (
     <header className="nav-wrap">
-      <a className="brand" href="#top">
-        <span className="brand-mark">Б</span>
-        <span>
-          Даниил Бондарев
-          <small>Developer / Automation</small>
-        </span>
-      </a>
+      <a className="brand" href="#top">Даниил Бондарев</a>
       <nav className={`nav-links ${open ? 'open' : ''}`} aria-label="Основная навигация">
         {links.map(([t, h]) => (
           <a key={h} href={h} onClick={() => setOpen(false)}>
@@ -155,17 +176,20 @@ function Navbar() {
           </a>
         ))}
       </nav>
-      <a href="#contact" className="nav-cta">
-        Обсудить проект <ArrowUpRight size={15} />
-      </a>
-      <button
-        className="mobile-menu"
-        onClick={() => setOpen((o) => !o)}
-        aria-label={open ? 'Закрыть меню' : 'Открыть меню'}
-        aria-expanded={open}
-      >
-        {open ? <X /> : <Menu />}
-      </button>
+      <div className="nav-actions">
+        <ThemeToggle />
+        <a href="#contact" className="nav-cta">
+          Обсудить проект <ArrowUpRight size={15} />
+        </a>
+        <button
+          className="mobile-menu"
+          onClick={() => setOpen((o) => !o)}
+          aria-label={open ? 'Закрыть меню' : 'Открыть меню'}
+          aria-expanded={open}
+        >
+          {open ? <X /> : <Menu />}
+        </button>
+      </div>
     </header>
   );
 }
@@ -227,10 +251,7 @@ function Marquee() {
     <div className="marquee" aria-hidden="true">
       <div className="marquee-track">
         {[...words, ...words, ...words].map((w, i) => (
-          <span key={i}>
-            {w}
-            <b>✳</b>
-          </span>
+          <span key={i}>{w}</span>
         ))}
       </div>
     </div>
@@ -245,21 +266,31 @@ function About() {
         <span>Кто стоит за кодом</span>
       </div>
       <div className="about-layout">
-        <Reveal>
-          <h2>
-            Технологии должны решать задачи<span>.</span>
-          </h2>
-        </Reveal>
-        <Reveal delay={0.12} className="about-copy">
-          <p className="lead">Я Даниил Бондарев — разработчик и специалист по автоматизации.</p>
-          <p>
-            У меня образование в области бизнес-информатики. Поэтому я смотрю на разработку не только со стороны кода, но и через призму бизнес-процессов: где теряется время, что можно упростить и как технология может принести измеримую пользу.
-          </p>
-          <p>Моя задача — не усложнить систему модными инструментами, а подобрать решение, которое действительно работает.</p>
-          <a href="#contact" className="text-link">
-            Обсудить задачу <ArrowUpRight size={17} />
-          </a>
-        </Reveal>
+        <div className="about-title">
+          <Reveal>
+            <h2>
+              Технологии должны решать задачи<span>.</span>
+            </h2>
+          </Reveal>
+        </div>
+        <div className="about-copy">
+          <Reveal>
+            <p className="lead">Я Даниил Бондарев — разработчик и специалист по автоматизации.</p>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p>
+              У меня образование в области бизнес-информатики. Поэтому я смотрю на разработку не только со стороны кода, но и через призму бизнес-процессов: где теряется время, что можно упростить и как технология может принести измеримую пользу.
+            </p>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <p>Моя задача — не усложнить систему модными инструментами, а подобрать решение, которое действительно работает.</p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <a href="#contact" className="text-link">
+              Обсудить задачу <ArrowUpRight size={17} />
+            </a>
+          </Reveal>
+        </div>
       </div>
       <div className="about-foot">
         <span>01 — Think</span>
@@ -441,8 +472,6 @@ function TechSphere({ active }: { active: number }) {
     <div className="sphere-area">
       <div className="sphere-glow" aria-hidden="true" />
       <div className="sphere" ref={sphereRef} aria-hidden="true">
-        <span className="sphere-ring ring-a" />
-        <span className="sphere-ring ring-b" />
         {points.map((p, i) => (
           <span
             key={p.name}
@@ -454,11 +483,6 @@ function TechSphere({ active }: { active: number }) {
             {p.name}
           </span>
         ))}
-        <div className="sphere-core">
-          <span>Build</span>
-          <b>✳</b>
-          <span>with purpose</span>
-        </div>
       </div>
       <div className="sphere-hint">
         <span>↔</span> Потяните, чтобы вращать
@@ -722,11 +746,6 @@ function Contact() {
         </Reveal>
         <Reveal delay={0.2}>
           <div className="contact-card">
-            <div className="contact-card-top">
-              <span className="brand-mark">Б</span>
-              <span>Let’s make it work</span>
-              <ArrowUpRight aria-hidden="true" />
-            </div>
             <strong>
               Даниил
               <br />
@@ -752,6 +771,19 @@ function Contact() {
   );
 }
 
+function TechBanner() {
+  const items = allTech.map((t) => t.name);
+  return (
+    <div className="marquee tech-banner" aria-hidden="true">
+      <div className="marquee-track">
+        {[...items, ...items, ...items].map((w, i) => (
+          <span key={i}>{w}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <MotionConfig reducedMotion="user">
@@ -763,6 +795,7 @@ export default function App() {
         <About />
         <Services />
         <Stack />
+        <TechBanner />
         <Process />
         <Projects />
         <Contact />

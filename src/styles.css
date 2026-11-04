@@ -591,3 +591,152 @@ h1, h2, h3, p { margin: 0; }
   .marquee-track { animation: none; }
   .flashlight { display: none; }
 }
+
+/* ======================================================================
+   v1.2: About с прилипающим текстом, прозрачная сфера, баннер технологий,
+   переключатель темы, минималистичное мобильное меню
+   ====================================================================== */
+
+/* --- О себе: текст следует за прокруткой --- */
+.about-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8vw;
+  align-items: start;
+  min-height: 140vh;
+  padding: 90px 0 60px;
+}
+.about-title { align-self: start; }
+.about-copy { position: sticky; top: 130px; max-width: 520px; }
+
+/* --- Сфера: без фона и рамки, плавает и вращается --- */
+.sphere-glow { display: none; }
+.sphere {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  animation: sphere-float 7s ease-in-out infinite;
+}
+@keyframes sphere-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+.sphere-chip { background: rgba(9, 18, 16, 0.55); }
+.sphere-hint { bottom: -6px; }
+
+/* --- Баннер технологий под сферой --- */
+.tech-banner {
+  margin-top: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: #0b1212;
+}
+.tech-banner .marquee-track span { font: 500 15px var(--font-body); color: #aebdb7; gap: 26px; }
+
+/* --- Навигация --- */
+.nav-actions { display: flex; align-items: center; gap: 14px; }
+.theme-toggle {
+  width: 40px; height: 40px; flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s;
+}
+.theme-toggle:hover { background: rgba(185, 244, 216, 0.1); border-color: rgba(185, 244, 216, 0.4); }
+
+@media (max-width: 900px) {
+  .about-layout { grid-template-columns: 1fr; gap: 30px; min-height: 0; }
+  .about-copy { position: static; max-width: 100%; }
+}
+
+@media (max-width: 640px) {
+  .nav-actions { gap: 8px; }
+  .nav-cta { display: none; }
+  .theme-toggle { width: 38px; height: 38px; }
+  /* минималистичное мобильное меню: лёгкая панель, тонкие разделители */
+  .nav-links {
+    top: 70px;
+    padding: 6px 6vw 16px;
+    background: var(--bg);
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.3);
+    gap: 0;
+    align-items: stretch;
+  }
+  .nav-links a {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-links a:last-child { border-bottom: 0; }
+  .about-layout { padding: 50px 0; }
+  .about-copy .lead { font-size: 19px; }
+}
+
+/* --- Светлая тема ---------------------------------------------------- */
+[data-theme='light'] {
+  --bg: #f3f6f4;
+  --bg-2: #e9efec;
+  --panel: #ffffff;
+  --text: #101817;
+  --body: #3d4c47;
+  --muted: #5d6e68;
+  --line: rgba(16, 24, 23, 0.14);
+  --mint: #1f7a58;
+  --coral: #e0604c;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: light;
+}
+[data-theme='light'] .flashlight { display: none; }
+[data-theme='light'] .nav-wrap { background: rgba(243, 246, 244, 0.9); border-bottom-color: rgba(16, 24, 23, 0.08); }
+[data-theme='light'] .nav-links a { color: #2c3a36; }
+[data-theme='light'] .nav-cta:hover, [data-theme='light'] .round-link:hover { color: #ffffff; }
+[data-theme='light'] .nav-cta:hover { background: var(--mint); }
+[data-theme='light'] .round-link:hover { background: var(--mint); }
+[data-theme='light'] .nav-links.open,
+[data-theme='light'] .nav-links { background: var(--bg); }
+[data-theme='light'] .hero h1 span:not(.hero-dot) {
+  background: linear-gradient(180deg, #26372f 0%, #7d8c87 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+[data-theme='light'] .marquee,
+[data-theme='light'] .tech-banner { background: #e9efec; border-color: var(--line); }
+[data-theme='light'] .marquee-track span { color: #2c3a36; }
+[data-theme='light'] .tech-banner .marquee-track span { color: #3d4c47; }
+[data-theme='light'] .about, [data-theme='light'] .stack-section,
+[data-theme='light'] .process, [data-theme='light'] .projects,
+[data-theme='light'] .contact { background: var(--bg); }
+[data-theme='light'] .about { background: var(--bg-2); }
+[data-theme='light'] .about-copy p { color: var(--body); }
+[data-theme='light'] .tech-group {
+  background: #ffffff;
+  border-color: rgba(16, 24, 23, 0.1);
+  box-shadow: 0 6px 24px rgba(16, 24, 23, 0.05);
+}
+[data-theme='light'] .tech-group.is-active { border-color: rgba(31, 122, 88, 0.55); box-shadow: 0 10px 30px rgba(31, 122, 88, 0.12); }
+[data-theme='light'] .tech-pills span { color: #2c3a36; border-color: rgba(16, 24, 23, 0.14); }
+[data-theme='light'] .sphere-chip { background: #ffffff; border-color: rgba(31, 122, 88, 0.35); color: #1d2b27; }
+[data-theme='light'] .sphere-chip.is-hot { background: rgba(31, 122, 88, 0.14); color: #0d1d18; border-color: var(--mint); box-shadow: 0 0 18px rgba(31, 122, 88, 0.2); }
+[data-theme='light'] .process-status { background: #ffffff; border-color: rgba(31, 122, 88, 0.25); box-shadow: 0 16px 40px rgba(16, 24, 23, 0.08); }
+[data-theme='light'] .progress-track { background: #d7e3dd; }
+[data-theme='light'] .process-dots li { background: #d7e3dd; }
+[data-theme='light'] .process-dots li.is-reached { background: var(--mint); }
+[data-theme='light'] .process-stage b { color: var(--text); }
+[data-theme='light'] .process-line { background: rgba(31, 122, 88, 0.18); }
+[data-theme='light'] .process-line-fill { background: linear-gradient(var(--mint), var(--coral)); }
+[data-theme='light'] .step-marker { background: var(--bg); color: #5d6e68; }
+[data-theme='light'] .process-step.is-passed .step-marker { color: var(--mint); }
+[data-theme='light'] .process-step.is-active .step-marker { color: #ffffff; }
+[data-theme='light'] .step-card { background: #ffffff; border-color: rgba(16, 24, 23, 0.1); box-shadow: 0 8px 26px rgba(16, 24, 23, 0.05); }
+[data-theme='light'] .process-step.is-active .step-card { border-color: rgba(31, 122, 88, 0.5); }
+[data-theme='light'] .project-card { background: #ffffff; border-color: rgba(31, 122, 88, 0.3); box-shadow: 0 20px 50px rgba(16, 24, 23, 0.08); }
+[data-theme='light'] .project-card-content p { color: var(--body); }
+[data-theme='light'] .contact-card { background: #ffffff; border-color: rgba(31, 122, 88, 0.3); box-shadow: 0 20px 60px rgba(16, 24, 23, 0.08); }
+[data-theme='light'] .contact-lines { border-top-color: rgba(16, 24, 23, 0.12); }
+[data-theme='light'] .contact-lines b { color: #1d2b27; }
+[data-theme='light'] .contact-copy p { color: var(--body); }
+[data-theme='light'] .theme-toggle:hover { background: rgba(31, 122, 88, 0.1); border-color: rgba(31, 122, 88, 0.4); }
