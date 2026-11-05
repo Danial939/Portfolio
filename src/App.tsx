@@ -1,8 +1,17 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+} from 'react';
 import {
   type MotionValue,
   MotionConfig,
   motion,
+  useMotionValue,
   useMotionValueEvent,
   useScroll,
   useSpring,
@@ -806,6 +815,81 @@ function ProjectCard({ p, i }: { p: (typeof projectCards)[number]; i: number }) 
   );
 }
 
+/* Карточка контакта: наклон следует за мышью, её можно потянуть по горизонтали,
+   а QR-код смещается отдельно и создаёт эффект глубины. */
+function ContactCard() {
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const dragX = useMotionValue(0);
+  const qrHoverX = useSpring(mx, { stiffness: 140, damping: 16 });
+  const qrHoverY = useSpring(my, { stiffness: 140, damping: 16 });
+  const tiltX = useSpring(my, { stiffness: 140, damping: 18 });
+  const tiltY = useSpring(mx, { stiffness: 140, damping: 18 });
+
+  const rotateY = useTransform([tiltY, dragX], (v) => v[0] * 22 + v[1] * 0.05);
+  const rotateX = useTransform(tiltX, (v) => -v * 16);
+  const rotateZ = useTransform(dragX, [-160, 160], [-5, 5]);
+  const qrX = useTransform(qrHoverX, (v) => v * 42);
+  const qrY = useTransform(qrHoverY, (v) => v * 42);
+
+  const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mx.set((e.clientX - rect.left) / rect.width - 0.5);
+    my.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+  const onPointerLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
+
+  return (
+    <motion.div
+      className="id-card"
+      drag="x"
+      dragConstraints={{ left: -140, right: 140 }}
+      dragElastic={0.3}
+      dragSnapToOrigin
+      whileTap={{ scale: 0.985 }}
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+      style={{ x: dragX, rotateX, rotateY, rotateZ, transformPerspective: 1100 }}
+    >
+      <div className="id-glow" aria-hidden="true" />
+      <div className="id-main">
+        <p className="id-label">Контакт</p>
+        <h3 className="id-name">
+          Даниил
+          <br />
+          Бондарев
+        </h3>
+        <p className="id-role">Разработчик · автоматизация · AI</p>
+        <dl className="id-rows">
+          {contactLines.map((l) => (
+            <div key={l.label}>
+              <dt>{l.label}</dt>
+              <dd>{l.href ? <a href={l.href}>{l.value}</a> : l.value}</dd>
+            </div>
+          ))}
+          <div>
+            <dt>Город</dt>
+            <dd>Краснодар</dd>
+          </div>
+        </dl>
+      </div>
+      <motion.a
+        href="https://t.me/champagnepapiiiiiiiiiiiiiiii"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="id-qr"
+        style={{ x: qrX, y: qrY }}
+      >
+        <img src="/telegram-qr.png" alt="QR-код для связи в Telegram" width={150} height={150} draggable={false} />
+        <span>Наведите камеру, откроется Telegram</span>
+      </motion.a>
+    </motion.div>
+  );
+}
+
 function Contact() {
   return (
     <section className="contact section-pad" id="contact">
@@ -828,22 +912,7 @@ function Contact() {
           <p>Расскажите, что хотите улучшить или создать. Вместе разберём задачу и найдём подходящее решение.</p>
         </Reveal>
         <Reveal delay={0.2}>
-          <div className="contact-card">
-            <p className="contact-card-label">Контакт</p>
-            <strong>
-              Даниил
-              <br />
-              Бондарев
-            </strong>
-            <ul className="contact-lines">
-              {contactLines.map((l) => (
-                <li key={l.label}>
-                  <span>{l.label}</span>
-                  <b>{l.href ? <a href={l.href}>{l.value}</a> : l.value}</b>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ContactCard />
         </Reveal>
       </div>
       <footer className="footer">
