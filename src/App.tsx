@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import {
+  type MotionValue,
   MotionConfig,
   motion,
   useMotionValueEvent,
@@ -42,10 +43,9 @@ const projectCards = [
 ];
 
 // Плейсхолдеры: замените на свои данные перед публикацией.
-const contactLines = [
-  { label: 'Telegram', value: '@ваш_ник' },
-  { label: 'Email', value: 'почта@домен.ру' },
-  { label: 'Телефон', value: '+7 (___) ___-__-__' },
+const contactLines: { label: string; value: string; href?: string }[] = [
+  { label: 'Telegram', value: '@champagnepapiiiiiiiiiiiiiiii', href: 'https://t.me/champagnepapiiiiiiiiiiiiiiii' },
+  { label: 'Email', value: 'dan44591@gmail.com', href: 'mailto:dan44591@gmail.com' },
 ];
 
 /* ----------------------------------------------------- иконки технологий
@@ -234,7 +234,7 @@ function Navbar() {
       <div className="nav-actions">
         <ThemeToggle />
         <a href="#contact" className="nav-cta">
-          Обсудить проект <ArrowUpRight size={15} />
+          Обсудить проект
         </a>
         <button
           className="mobile-menu"
@@ -279,16 +279,6 @@ function Hero() {
             Помогаю бизнесу работать эффективнее: создаю сайты, веб-приложения и автоматизирую процессы с помощью технологий.
           </p>
         </Reveal>
-        <Reveal delay={0.25}>
-          <a href="#services" className="round-link">
-            <span>
-              Смотреть
-              <br />
-              возможности
-            </span>
-            <ArrowDownRight size={22} />
-          </a>
-        </Reveal>
       </div>
       <div className="hero-index">
         <span>01 / 06</span>
@@ -310,6 +300,27 @@ function Marquee() {
         ))}
       </div>
     </div>
+  );
+}
+
+/* Текст «печатается» за прокруткой: каждое слово проявляется по мере движения */
+function ScrollWord({ word, index, total, progress }: { word: string; index: number; total: number; progress: MotionValue<number> }) {
+  const start = index / total;
+  const end = (index + 1) / total;
+  const opacity = useTransform(progress, [start, end], [0.16, 1]);
+  return <motion.span className="scroll-word" style={{ opacity }}>{word} </motion.span>;
+}
+
+function ScrollWords({ text, className = '' }: { text: string; className?: string }) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 45%'] });
+  const words = text.split(' ');
+  return (
+    <p ref={ref} className={`scroll-words ${className}`}>
+      {words.map((w, i) => (
+        <ScrollWord key={i} word={w} index={i} total={words.length} progress={scrollYProgress} />
+      ))}
+    </p>
   );
 }
 
@@ -349,37 +360,19 @@ function About() {
           </ParallaxBlock>
         </div>
         <div className="about-copy">
-          <ParallaxBlock speed={-50}>
-            <Reveal>
-              <p className="lead">Привет, я Даниил — разработчик и специалист по автоматизации бизнеса.</p>
-            </Reveal>
-          </ParallaxBlock>
-          <ParallaxBlock speed={40}>
-            <Reveal delay={0.08}>
-              <p>
-                Учусь на бизнес-информатике, поэтому смотрю на разработку не только со стороны кода, но и через бизнес-процессы: где теряется время, что можно упростить и как технология приносит реальную пользу.
-              </p>
-            </Reveal>
-          </ParallaxBlock>
-          <ParallaxBlock speed={20}>
-            <Reveal delay={0.14}>
-              <p>
-                Делаю сайты, веб-приложения и AI-автоматизацию. Не усложняю систему модными инструментами: подбираю решение, которое действительно работает.
-              </p>
-            </Reveal>
-          </ParallaxBlock>
-          <ParallaxBlock speed={-20}>
-            <Reveal delay={0.2}>
-              <div className="about-actions">
-                <a href="#projects" className="btn btn-primary">
-                  Смотреть проекты <ArrowUpRight size={17} />
-                </a>
-                <a href="#contact" className="btn btn-ghost">
-                  Связаться
-                </a>
-              </div>
-            </Reveal>
-          </ParallaxBlock>
+          <ScrollWords className="lead" text="Привет, я Даниил — разработчик и специалист по автоматизации бизнеса." />
+          <ScrollWords text="Учусь на бизнес-информатике, поэтому смотрю на разработку не только со стороны кода, но и через бизнес-процессы: где теряется время, что можно упростить и как технология приносит реальную пользу." />
+          <ScrollWords text="Делаю сайты, веб-приложения и AI-автоматизацию. Не усложняю систему модными инструментами: подбираю решение, которое действительно работает." />
+          <Reveal delay={0.2}>
+            <div className="about-actions">
+              <a href="#projects" className="btn btn-primary">
+                Смотреть проекты <ArrowUpRight size={17} />
+              </a>
+              <a href="#contact" className="btn btn-ghost">
+                Связаться
+              </a>
+            </div>
+          </Reveal>
         </div>
       </div>
       <div className="about-foot">
@@ -836,6 +829,7 @@ function Contact() {
         </Reveal>
         <Reveal delay={0.2}>
           <div className="contact-card">
+            <p className="contact-card-label">Контакт</p>
             <strong>
               Даниил
               <br />
@@ -845,7 +839,7 @@ function Contact() {
               {contactLines.map((l) => (
                 <li key={l.label}>
                   <span>{l.label}</span>
-                  <b>{l.value}</b>
+                  <b>{l.href ? <a href={l.href}>{l.value}</a> : l.value}</b>
                 </li>
               ))}
             </ul>

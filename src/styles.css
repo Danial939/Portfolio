@@ -800,3 +800,54 @@ h1, h2, h3, p { margin: 0; }
   .about h2 { font-size: clamp(56px, 17vw, 96px); }
   .about-layout { min-height: 0; }
 }
+
+/* v1.5: акцент #FC6A44, текст «Обо мне» по прокрутке, шапка и контакты */
+:root { --accent: #FC6A44; }
+
+.brand { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.nav-cta {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #101817;
+  font-weight: 700;
+  padding: 12px 22px;
+}
+.nav-cta:hover { background: #ff8266; border-color: #ff8266; color: #101817; }
+[data-theme='light'] .nav-cta:hover { background: #ff8266; color: #101817; }
+
+.section-kicker span:first-child { color: var(--accent); }
+.process-pct { color: var(--accent); }
+.process-dots li.is-reached { background: var(--accent); }
+.progress-fill { background: var(--accent); }
+.process-line-fill { background: var(--accent); }
+.step-meta span:first-child { color: var(--accent); }
+.step-meta span:first-child { color: var(--accent); }
+.process-step.is-passed .step-marker { color: var(--accent); border-color: rgba(252, 106, 68, 0.6); }
+.process-step.is-active .step-marker { background: var(--accent); border-color: var(--accent); color: #101817; box-shadow: 0 0 26px rgba(252, 106, 68, 0.35); }
+.process-step.is-active .step-card { border-color: rgba(252, 106, 68, 0.5); }
+.coming-soon i { background: var(--accent); box-shadow: 0 0 13px var(--accent); }
+.text-link { color: var(--accent); border-bottom-color: rgba(252, 106, 68, 0.5); }
+.btn-primary { background: var(--accent); color: #101817; }
+.btn-primary:hover { background: #ff8266; }
+.btn-ghost { border-color: rgba(252, 106, 68, 0.6); color: var(--accent); }
+.btn-ghost:hover { background: var(--accent); color: #101817; }
+[data-theme='light'] .btn-primary:hover { background: #ff8266; color: #101817; }
+[data-theme='light'] .btn-ghost:hover { color: #101817; }
+
+/* текст «Обо мне»: проявляется по прокрутке */
+.scroll-words { font-size: 17px; line-height: 1.75; margin: 0 0 18px; }
+.scroll-words .scroll-word { display: inline; color: #ffffff; }
+.scroll-words.lead { font-size: 24px; line-height: 1.4; font-weight: 600; margin-bottom: 26px; }
+[data-theme='light'] .scroll-words .scroll-word { color: var(--text); }
+
+/* контакты */
+.contact-card-label { font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: 0.02em; }
+.contact-lines a { color: #d6e6de; text-decoration: none; }
+.contact-lines a:hover { color: var(--accent); }
+[data-theme='light'] .contact-lines a { color: #1d2b27; }
+
+@media (max-width: 640px) {
+  .brand { font-size: 17px; }
+  .scroll-words { font-size: 16px; }
+  .scroll-words.lead { font-size: 20px; }
+}
