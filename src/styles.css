@@ -14,8 +14,8 @@
   --mint: #b9f4d8;
   --coral: #ff806d;
 
-  --font-display: 'Unbounded', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-body: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   color-scheme: dark;
   color: var(--text);
@@ -879,12 +879,12 @@ h1, h2, h3, p { margin: 0; }
 }
 .id-main { position: relative; z-index: 1; min-width: 0; flex: 1; }
 .id-label, .id-role {
-  font: 600 12px/1.2 'JetBrains Mono', ui-monospace, monospace;
+  font: 600 12px/1.2 var(--font-body);
   letter-spacing: 0.14em; text-transform: uppercase;
   color: #FC6A44;
 }
 .id-name {
-  font: 900 clamp(30px, 4vw, 46px)/0.95 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font: 800 clamp(30px, 4vw, 46px)/1 var(--font-display);
   letter-spacing: -0.035em; text-transform: uppercase;
   color: #f2f7f5;
   margin: 16px 0 14px;
@@ -893,10 +893,10 @@ h1, h2, h3, p { margin: 0; }
 .id-rows { margin: 28px 0 0; display: grid; gap: 14px; }
 .id-rows > div { display: grid; grid-template-columns: 92px 1fr; align-items: baseline; gap: 12px; }
 .id-rows dt {
-  font: 500 11px/1.4 'JetBrains Mono', ui-monospace, monospace;
+  font: 500 11px/1.4 var(--font-body);
   letter-spacing: 0.12em; text-transform: uppercase; color: #7f918b;
 }
-.id-rows dd { margin: 0; font: 600 16px/1.4 'Inter', system-ui, sans-serif; color: #f2f7f5; word-break: break-word; }
+.id-rows dd { margin: 0; font: 600 16px/1.4 var(--font-body); color: #f2f7f5; word-break: break-word; }
 .id-rows a { color: inherit; text-decoration: none; transition: color 0.2s; }
 .id-rows a:hover { color: #FC6A44; }
 .id-qr {
