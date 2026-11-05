@@ -17,7 +17,7 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion';
-import { ArrowDownRight, ArrowRight, ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react';
 
 /* ------------------------------------------------------------------ данные */
 
@@ -826,7 +826,7 @@ function ContactCard() {
   const tiltX = useSpring(my, { stiffness: 140, damping: 18 });
   const tiltY = useSpring(mx, { stiffness: 140, damping: 18 });
 
-  const rotateY = useTransform([tiltY, dragX], (v) => v[0] * 22 + v[1] * 0.05);
+  const rotateY = useTransform([tiltY, dragX], ([hx, dx]: number[]) => hx * 22 + dx * 0.05);
   const rotateX = useTransform(tiltX, (v) => -v * 16);
   const rotateZ = useTransform(dragX, [-160, 160], [-5, 5]);
   const qrX = useTransform(qrHoverX, (v) => v * 42);
