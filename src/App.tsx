@@ -45,10 +45,156 @@ const services: [string, string, string][] = [
   ['04', 'Веб-приложения', 'Разрабатываю веб-сервисы и внутренние инструменты под конкретные задачи бизнеса.'],
 ];
 
-const projectCards = [
-  { n: '01', type: 'Кейсы скоро появятся', title: 'Проект под задачу', text: 'Здесь появится описание реализованного проекта, его задачи и результата.', cls: 'project-art-one', label: 'Сайт / Веб' },
-  { n: '02', type: 'Автоматизация', title: 'Рабочие процессы', text: 'Покажу, как связать сервисы и убрать повторяющиеся операции.', cls: 'project-art-two', label: 'AI / Automation' },
-  { n: '03', type: 'Веб-приложение', title: 'Цифровой продукт', text: 'Место для демонстрации интерфейса и функциональности приложения.', cls: 'project-art-three', label: 'Web app' },
+/* Структура проектов в стиле andreyzhulev.ru:
+   - featured: крупные карточки с видео/превью (сайты с видео)
+   - list: детальные карточки с раскрытием
+   Замени данные на свои — видео, ссылки, тексты. */
+type Project = {
+  id: string;
+  n: string;
+  title: string;
+  subtitle: string;
+  client?: string;
+  text: string;
+  tags: string[];
+  label: string;
+  href?: string;
+  video?: string;       // mp4 / webm
+  poster?: string;      // обложка
+  featured?: boolean;   // в блоке «сайты с видео»
+};
+
+const projectCards: Project[] = [
+  // —— Featured: сайты с видео (как у Андрея) ——
+  {
+    id: 'noir',
+    n: '01',
+    title: 'NOIR GT Obsidian',
+    subtitle: 'Лендинг премиального автомобиля',
+    client: 'NOIR GT',
+    text: 'Сайт, где история продукта разворачивается при прокрутке. Тёмный премиальный лендинг с видео-секциями и плавными переходами.',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'GSAP', 'Адаптив'],
+    label: 'Сайт с видео',
+    href: '#',
+    video: '/projects/videos/noir-gt.mp4',
+    poster: '/projects/covers/noir-gt.webp',
+    featured: true,
+  },
+  {
+    id: 'dom7',
+    n: '02',
+    title: 'Дом №7 «Ясное»',
+    subtitle: 'Продажа одноэтажного дома',
+    client: 'Дом №7',
+    text: 'Продающий лендинг с акцентом на атмосферу и детали. Видео и крупные фото работают на эмоцию покупателя.',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'Адаптив'],
+    label: 'Сайт с видео',
+    href: '#',
+    video: '/projects/videos/dom-yasnoe.mp4',
+    poster: '/projects/covers/dom-yasnoe.webp',
+    featured: true,
+  },
+  {
+    id: 'sloy',
+    n: '03',
+    title: 'Слой',
+    subtitle: 'Кухни на заказ',
+    client: 'Слой',
+    text: 'Сайт для производителя кухонь. Чистая подача, сильный визуал и понятный путь к заявке.',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'Адаптив'],
+    label: 'Сайт с видео',
+    href: '#',
+    video: '/projects/videos/sloy.mp4',
+    poster: '/projects/covers/sloy.webp',
+    featured: true,
+  },
+  {
+    id: 'andrianova-f',
+    n: '04',
+    title: 'Andrianova Studio',
+    subtitle: 'Студия дизайна презентаций',
+    client: 'Andrianova Studio',
+    text: 'Чёрно-белый сайт в журнальном стиле. На первом экране слово STUDIO лежит поверх стопки настоящих слайдов и инвертирует их цвет. 12 работ открываются в отдельном просмотрщике.',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'PHP', 'Адаптив'],
+    label: 'Сайт с видео',
+    href: 'http://andrianova-studio.ru/',
+    video: '/projects/videos/andrianova.mp4',
+    poster: '/projects/covers/andrianova.webp',
+    featured: true,
+  },
+  // —— Список проектов ——
+  {
+    id: 'andrianova',
+    n: '01',
+    title: 'Andrianova Studio',
+    subtitle: 'Студия дизайна презентаций',
+    client: 'Andrianova Studio',
+    text: 'Сайт студии, которая делает презентации. Чёрно-белый, в журнальном стиле. На первом экране слово STUDIO лежит поверх стопки настоящих слайдов и инвертирует их цвет, а карточки чуть двигаются за мышкой. 12 работ открываются в отдельном просмотрщике, слайды из него не скачать и не перетащить. Заявки приходят студии на почту.',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'PHP', 'Адаптив'],
+    label: 'Сайт / Студия',
+    href: 'http://andrianova-studio.ru/',
+    poster: '/projects/covers/andrianova-studio.webp',
+  },
+  {
+    id: 'vertical',
+    n: '02',
+    title: 'Вертикаль стиля',
+    subtitle: 'Мастерская Дениса Шилкина',
+    client: 'Вертикаль стиля',
+    text: 'Премиальный сайт-визитка для мастерской из Самары: москитные сетки плиссе собственного производства, мягкие окна и ZIP-шторы для веранд, садовая мебель и костровые чаши. Каждое направление — свой «мир» со своим цветом, переходы между ними плавно перетекают, как рассвет. Лоадер рисует логотип по частям, работы показаны в 3D-карусели с видео.',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'GSAP', 'Адаптив'],
+    label: 'Сайт с видео',
+    href: 'https://vertstyle.ru/',
+    poster: '/projects/covers/vertstyle.webp',
+  },
+  {
+    id: 'vis',
+    n: '03',
+    title: 'Вис',
+    subtitle: 'Онлайн-журнал о моде и культуре Москвы',
+    client: 'Вис',
+    text: 'Онлайн-журнал про моду и культурную жизнь Москвы: интервью, премьеры, показы, бэкстейдж. На первом экране большой логотип «Вис» с летающими буквами. Статьи редакция публикует сама через админку, которую я написал с нуля на PHP и SQLite, без готовых CMS.',
+    tags: ['PHP', 'SQLite', 'JavaScript', 'Админ-панель', 'Адаптив'],
+    label: 'Журнал / CMS',
+    href: 'https://visjournal.ru/',
+    poster: '/projects/covers/visjournal.webp',
+  },
+  {
+    id: 'copyclean',
+    n: '04',
+    title: 'CopyClean',
+    subtitle: 'Магазин и сервисный центр',
+    client: 'CopyClean',
+    text: 'У компании два направления: свой интернет-магазин химии для оргтехники и сервисный центр в Балашихе. Поэтому вместо обычной главной сделал экран, разрезанный пополам. Слева магазин с очистителями, смазками и салфетками, справа ремонт принтеров, заправка картриджей и ремонт ноутбуков.',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'Интернет-магазин', 'Адаптив'],
+    label: 'E-commerce',
+    href: 'https://copyclean.ru/',
+    poster: '/projects/covers/copyclean-ru.webp',
+  },
+  {
+    id: 'tekhnar',
+    n: '05',
+    title: 'Технарь',
+    subtitle: 'Ремонт ротационных соединений',
+    client: 'Технарь',
+    text: 'Корпоративный сайт с WordPress. Чёткая структура услуг, кейсы и форма обратной связи.',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'WordPress', 'Адаптив'],
+    label: 'Корпоративный',
+    href: '#',
+    poster: '/projects/covers/tehnar-ooo.webp',
+  },
+  {
+    id: 'expert',
+    n: '06',
+    title: 'Эксперт Групп',
+    subtitle: 'Сайт металлообработки',
+    client: 'Эксперт Групп',
+    text: 'Презентационный сайт для компании металлообработки. Bootstrap + Swiper, быстрая загрузка.',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'Bootstrap', 'Swiper'],
+    label: 'Корпоративный',
+    href: '#',
+    poster: '/projects/covers/cnc.webp',
+  },
 ];
 
 // Плейсхолдеры: замените на свои данные перед публикацией.
@@ -751,67 +897,210 @@ function Process() {
 }
 
 function Projects() {
+  const featured = projectCards.filter((p) => p.featured);
+  const rest = projectCards.filter((p) => !p.featured);
+
   return (
     <section className="projects section-pad" id="projects">
       <div className="section-kicker">
-        <span>05 / Избранное</span>
-        <span>Практика вместо обещаний</span>
+        <span>05 / Портфолио</span>
+        <span>Сайты, которые работают</span>
       </div>
+
       <div className="projects-heading">
-        <h2>
-          Проекты<span>.</span>
-        </h2>
-        <p>Здесь будут реальные работы с описанием задачи, решения и результата. Пока оставлены места под мои проекты.</p>
+        <Reveal>
+          <h2>
+            Проекты<span>.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <p>
+            Сайты, которые я сделал для клиентов. Листайте вниз, а чтобы посмотреть проект поближе — нажмите на карточку.
+          </p>
+        </Reveal>
       </div>
-      <div className="project-stack">
-        {projectCards.map((p, i) => (
-          <ProjectCard key={p.n} p={p} i={i} />
+
+      {/* —— Блок «Новое · сайты с видео» (как у Андрея) —— */}
+      <div className="projects-featured">
+        <div className="projects-featured-head">
+          <span className="projects-badge">Новое · сайты с видео</span>
+          <p>Сайты, где история продукта разворачивается при прокрутке.</p>
+        </div>
+        <div className="featured-grid">
+          {featured.map((p, i) => (
+            <FeaturedProjectCard key={p.id} p={p} index={i} />
+          ))}
+        </div>
+      </div>
+
+      {/* —— Список детальных карточек —— */}
+      <div className="projects-list">
+        <div className="projects-list-head">
+          <span>Все проекты</span>
+          <span className="projects-count">{String(projectCards.length).padStart(2, '0')}</span>
+        </div>
+        {rest.map((p, i) => (
+          <DetailProjectCard key={p.id} p={p} index={i} />
         ))}
       </div>
     </section>
   );
 }
 
-function ProjectCard({ p, i }: { p: (typeof projectCards)[number]; i: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'start start'] });
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1 - 0.035 * (2 - i)]);
+function FeaturedProjectCard({ p, index }: { p: Project; index: number }) {
+  const [hovered, setHovered] = useState(false);
+  const [inView, setInView] = useState(false);
+  const cardRef = useRef<HTMLAnchorElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Автоплей, когда карточка попадает в зону видимости
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio > 0.35),
+      { threshold: [0, 0.35, 0.6] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || !p.video) return;
+    const shouldPlay = inView || hovered;
+    if (shouldPlay) {
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+      // не сбрасываем currentTime — чтобы при повторном входе продолжало плавно
+    }
+  }, [inView, hovered, p.video]);
+
   return (
-    <div className="project-card-wrap" ref={ref}>
-      <motion.article className="project-card" style={{ scale, top: `${90 + i * 22}px` }}>
-        <div className="project-card-top">
-          <span>
-            {p.n} / {p.type}
-          </span>
-          <span className="project-tag">{p.label}</span>
+    <Reveal delay={index * 0.07}>
+      <a
+        ref={cardRef}
+        href={p.href && p.href !== '#' ? p.href : undefined}
+        className="featured-card"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onClick={(e) => {
+          if (!p.href || p.href === '#') e.preventDefault();
+        }}
+        target={p.href && p.href !== '#' ? '_blank' : undefined}
+        rel={p.href && p.href !== '#' ? 'noopener noreferrer' : undefined}
+      >
+        <div className="featured-media">
+          {p.video ? (
+            <video
+              ref={videoRef}
+              src={p.video}
+              poster={p.poster}
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
+          ) : p.poster ? (
+            <img src={p.poster} alt={p.title} />
+          ) : (
+            <div className={`featured-placeholder featured-ph-${(index % 4) + 1}`}>
+              <span>{p.n}</span>
+            </div>
+          )}
+          <div className="featured-overlay" />
         </div>
-        <div className="project-card-content">
-          <div>
-            <h3>{p.title}</h3>
-            <p>{p.text}</p>
-            <span className="coming-soon">
-              <i /> Место для проекта
+        <div className="featured-body">
+          <div className="featured-meta">
+            <span className="featured-num">{p.n}</span>
+            <span className="project-tag">{p.label}</span>
+          </div>
+          <h3>{p.title}</h3>
+          <p>{p.subtitle}</p>
+          <span className="featured-link">
+            Смотреть проект <ArrowUpRight size={16} />
+          </span>
+        </div>
+      </a>
+    </Reveal>
+  );
+}
+
+function DetailProjectCard({ p, index }: { p: Project; index: number }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Reveal delay={index * 0.05}>
+      <article className={`detail-card ${open ? 'is-open' : ''}`}>
+        <button
+          type="button"
+          className="detail-card-trigger"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+        >
+          <div className="detail-card-left">
+            <span className="detail-num">
+              {p.n} / {String(projectCards.filter((x) => !x.featured).length).padStart(2, '0')}
+            </span>
+            <div>
+              <h3>{p.title}</h3>
+              <p className="detail-sub">{p.subtitle}</p>
+            </div>
+          </div>
+          <div className="detail-card-right">
+            <span className="project-tag">{p.label}</span>
+            <span className={`detail-chevron ${open ? 'open' : ''}`}>
+              <ArrowUpRight size={18} />
             </span>
           </div>
-          <div className={`project-art ${p.cls}`}>
-            <div className="art-window">
-              <div className="art-bar">
-                <i />
-                <i />
-                <i />
+        </button>
+
+        <motion.div
+          className="detail-card-panel"
+          initial={false}
+          animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
+          transition={{ duration: 0.45, ease: [0.22, 0.7, 0.2, 1] }}
+        >
+          <div className="detail-card-inner">
+            <div className="detail-copy">
+              {p.client && (
+                <p className="detail-client">
+                  <span>Клиент</span> {p.client}
+                </p>
+              )}
+              <p>{p.text}</p>
+              <div className="detail-tags">
+                {p.tags.map((t) => (
+                  <span key={t}>{t}</span>
+                ))}
               </div>
-              <div className="art-lines">
-                <b />
-                <b />
-                <b />
-              </div>
-              <div className="art-orb" />
+              {p.href && p.href !== '#' && (
+                <a
+                  href={p.href}
+                  className="btn btn-ghost detail-live"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Живой сайт <ArrowUpRight size={16} />
+                </a>
+              )}
             </div>
-            <span className="art-caption">Case study · 2026</span>
+            <div className={`detail-visual detail-ph-${(index % 4) + 1}`}>
+              {p.video ? (
+                <video src={p.video} poster={p.poster} muted loop playsInline preload="metadata" />
+              ) : p.poster ? (
+                <img src={p.poster} alt={p.title} />
+              ) : (
+                <div className="detail-visual-inner">
+                  <span>{p.title}</span>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </motion.article>
-    </div>
+        </motion.div>
+      </article>
+    </Reveal>
   );
 }
 
